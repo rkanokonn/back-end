@@ -4,8 +4,11 @@ const dotenv = require('dotenv')
 const hospitals = require('./routes/hospitals');
 const cookieParser = require('cookie-parser')
 const auth = require('./routes/auth')
+const connectDB = require('./config/db')
 
 dotenv.config({path:'./config/config.env'});
+
+connectDB();
 
 const app = express();
 
@@ -17,19 +20,10 @@ app.use(`/api/v1/hospitals` , hospitals);
 app.use(`/api/v1/auth` , auth);
 
 const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI;
 
-// ฟังก์ชันเพื่อเชื่อมต่อกับ MongoDB
-const connectDB = async () => {
-    try {
-      await mongoose.connect(MONGO_URI);
-      console.log('MongoDB Connected');
-    } catch (error) {
-      console.error('Error connecting to MongoDB:', error.message);
-      process.exit(1);
-    }
-  };
+const server = app.listen(PORT , console.log('Server running in :', process.env.NODE_ENV , ' mode on port :' , PORT))
 
-  connectDB();
-
-app.listen(PORT , console.log('Server running in :', process.env.NODE_ENV , ' mode on port :' , PORT))
+process.on('unhandleRejection' , (err,promise)=>{
+  console.log(`Error : ${err.message}`);
+  server.close(()=>process.exit(1))
+});
