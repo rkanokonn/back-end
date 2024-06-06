@@ -31,7 +31,17 @@ const HospitalSchema = new mongoose.Schema({
     religion:{
         type:String,
         required:[true , 'Please add an religion'],
-    },
+    }},
+    {
+        toJSON : {virtuals:true},
+        toObject : {virtuals:true}
 });
+
+HospitalSchema.virtual('appointment',{
+    ref : 'Appointment',
+    localField : '_id',
+    foreignField : 'hospital',
+    justOne : 'false'
+})
 
 module.exports = mongoose.model('Hospital' , HospitalSchema)
