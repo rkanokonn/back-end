@@ -7,4 +7,6 @@ const {protect } = require('../middleware/auth');
 
 router.route('/').get(protect , getAppointment);
 
+router.route('/:id').get(protect , getAppointment);
+
 module.exports = router;

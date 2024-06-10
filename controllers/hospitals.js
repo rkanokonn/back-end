@@ -14,7 +14,7 @@ exports.getHospitals= async (req ,res,next) =>{
         let queryStr = JSON.stringify(req.query);
         queryStr=queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match =>`$${match}`);
 
-        query = Hospital.find(JSON.parse(queryStr)).populate('appointment');
+        query = Hospital.find(JSON.parse(queryStr)).populate('appointments');
 
         //select
         if(req.query.select){
@@ -117,14 +117,14 @@ exports.updateHospital=async(req ,res,next)=>{
 // delete
 exports.deleteHospital=async (req ,res,next)=>{
     try {
-        const hospital = await Hospital.findByIdAndDelete(req.params.id);
-        if (!hospital) {
+        const hospitals = await Hospital.findById(req.params.id);
+
+        if (!hospitals) { 
             return res.status(400).json({success:false})
         }
-        res.status(200).json({
-            success:true ,
-            data: {}
-        });
+        await hospitals.deleteOne();
+        res.status(200).json({ success:true ,data: {} });
+
     } catch (err) {
         console.log(err.stack);
         res.status(400).json({success:false})

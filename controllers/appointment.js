@@ -8,19 +8,22 @@ exports.getAppointment=async( req , res ,next)=>{
         query = Appointment.find({user:req.user.id}).populate({
             path:'hospital',
             select:'name province tel'
-        });
+            });
+        console.log(Appointment.find , 'user');
+        console.log(query.user , 'user');
+
     } else {
         if(req.params.hospitalId){
-            console.log(req.params.hospitalId);
-            query = Appointment.find({hospital :req.params.hospitalId}).populate({
+            query = Appointment.find({ hospital: req.params.hospitalId}).populate({
                 path:'hospital',
                 select:'name province tel'
-            })
+                });
+
         }else{
             query = Appointment.find().populate({
                 path:'hospital',
                 select:'name province tel'
-            })
+                })
         }
     }
     try {
@@ -30,7 +33,9 @@ exports.getAppointment=async( req , res ,next)=>{
             success:true , 
             count:appointments.length,
             data: appointments
+            
         });
+            console.log("🚀 ~ res.status ~ appointments:", appointments)
     } catch (err) {
         console.log(err.stack);
         res.status(500).json({
