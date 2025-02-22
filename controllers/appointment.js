@@ -14,7 +14,9 @@ exports.getAppointments=async( req , res ,next)=>{
         console.log(Appointment.find , 'user');
         console.log(query.user , 'user');
 
+
     } else {
+        
         if(req.params.hospitalId){
             query = Appointment.find({ hospital: req.params.hospitalId}).populate({
                 path:'hospital',

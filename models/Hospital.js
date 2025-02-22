@@ -51,4 +51,6 @@ HospitalSchema.virtual('appointments',{
 })
 
 
+
+
 module.exports = mongoose.model('Hospital' , HospitalSchema)

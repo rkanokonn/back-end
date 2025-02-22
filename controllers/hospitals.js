@@ -15,13 +15,13 @@ exports.getHospitals= async (req ,res,next) =>{
         queryStr=queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match =>`$${match}`);
 
         query = Hospital.find(JSON.parse(queryStr)).populate('appointments');
-
         //select
         if(req.query.select){
             const fields = req.query.select.split(',').join(' ');
-            query = query.select(fields);
+            query = query.select(fields);   
         }
-
+        
+        
         //sort
         if(req.query.sort){
             const sortBy = req.query.sort.split(',').join(' ');
